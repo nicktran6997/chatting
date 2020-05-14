@@ -17,5 +17,14 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     })
+    socket.on('new', () => {
+        io.clients((error, clients) => {
+            if (error) throw error;
+            io.emit('new', clients.length)
+        })
+    })
+    socket.on('disconnect', () => {
+        io.emit('chat message', 'A user has left');
+    })
 })
 server.listen(process.env.PORT || 5000, () => console.log('Server has started'));

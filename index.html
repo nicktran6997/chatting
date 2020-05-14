@@ -6,8 +6,8 @@
   </head>
   <body>
     <div id='chat-container'>
-        <div class='heading'>
-            ANONYMOUS CHAT ROOM
+        <div id='heading'>
+            ANONYMOUS CHAT ROOM 0
         </div>
         <div id='message-container'>
             <ul id="message"></ul>
@@ -23,13 +23,19 @@
     <script>
 
         //join chatroom
+        
         $(function() {
             var socket = io();
+            socket.emit('new');
+            socket.emit('chat message', "A new user has joined")
             $('form').submit(function(e) {
                 e.preventDefault();
                 socket.emit('chat message', $('#m').val());
                 $('#m').val('');
                 return false;
+            })
+            socket.on('new', function(n) {
+                $('#heading').text(`ANONYMOUS CHAT ROOM: ${n} USERS`)
             })
             socket.on('chat message', function(msg) {
                 var li = $('<li>');
